@@ -720,29 +720,21 @@
         for (let i = 0; i < 7; i++) {
           const day = dayMap[i];
           if (day) {
-            if (day.contributionCount > 0) {
-              const level = getLevel(day.contributionCount);
-              weeksHtml += `<div class="day-cell" data-count="${day.contributionCount}" data-date="${day.date}" style="border:none">${makePetal(level)}</div>`;
+            const count = day.contributionCount;
+            if (count > 0) {
+              const level = getLevel(count);
+              // Stagger delay based on week index for a "wave" effect from left to right
+              const delay = wi * 20 + i * 10;
+              weeksHtml += `<div class="day-cell bloom-cell" data-count="${count}" data-date="${day.date}" style="border:none; --delay: ${delay}ms">${makePetal(level)}</div>`;
+              flowerCount++;
             } else {
-              weeksHtml += `<div class="day-cell zero" data-count="${day.contributionCount}" data-date="${day.date}"></div>`;
+              weeksHtml += `<div class="day-cell zero" data-count="${count}" data-date="${day.date}"></div>`;
             }
           } else {
             // Padding for missing days in partial weeks (start/end of year)
             weeksHtml += `<div class="day-cell" style="visibility:hidden"></div>`;
           }
         }
-
-        week.contributionDays.forEach(day => {
-          if (day.contributionCount > 0) {
-            const level = getLevel(day.contributionCount);
-            // Stagger delay based on week index for a "wave" effect from left to right
-            const delay = wi * 20 + (new Date(day.date).getDay() * 10);
-            weeksHtml += `<div class="day-cell bloom-cell" data-count="${day.contributionCount}" data-date="${day.date}" style="border:none; --delay: ${delay}ms">${makePetal(level)}</div>`;
-            flowerCount++;
-          } else {
-            weeksHtml += `<div class="day-cell zero" data-count="${day.contributionCount}" data-date="${day.date}"></div>`;
-          }
-        });
         weeksHtml += '</div>';
       });
       weeksHtml += '</div>';
